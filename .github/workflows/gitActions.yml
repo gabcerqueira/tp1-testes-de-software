@@ -23,6 +23,7 @@ jobs:
       run: yarn install
 
   build:
+    needs: install
     runs-on: ubuntu-latest
 
     steps:
@@ -38,6 +39,7 @@ jobs:
       run: yarn run build
 
   tests:
+    needs: [install, build]
     runs-on: ubuntu-latest
 
     steps:
