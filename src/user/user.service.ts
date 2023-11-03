@@ -2,7 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 
 import { User } from './schema/user.schema';
 import { UserRepository } from './user.repository';
-import { ErrorMessages } from 'src/shared/messages/ErrorMessages';
+import { ErrorMessages } from '../shared/messages/ErrorMessages';
 import { SanitizedUser } from './dto/sanitizedUser';
 import { IuserService } from './interfaces/Iuser.service';
 

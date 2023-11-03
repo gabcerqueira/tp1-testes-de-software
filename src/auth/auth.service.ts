@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { compareSync } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { UserService } from 'src/user/user.service';
-import { User } from 'src/user/schema/user.schema';
+import { UserService } from '../user/user.service';
+import { User } from '../user/schema/user.schema';
 import { IauthService } from './interfaces/Iauth.service';
-import { LoginDto } from './dto/login.dto';
 import { UserInfoToken } from './dto/userInfo.dto';
 import { DecodedToken } from './dto/decodedToken';
-import { ErrorMessages } from 'src/shared/messages/ErrorMessages';
+import { ErrorMessages } from '../shared/messages/ErrorMessages';
 
 @Injectable()
 export class AuthService implements IauthService {

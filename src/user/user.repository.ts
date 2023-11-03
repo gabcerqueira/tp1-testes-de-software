@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './schema/user.schema';
 import { hash } from 'bcrypt';
-import { ErrorMessages } from 'src/shared/messages/ErrorMessages';
+import { ErrorMessages } from '../shared/messages/ErrorMessages';
 import { IuserRepository } from './interfaces/Iuser.repository';
 @Injectable()
 export class UserRepository implements IuserRepository {

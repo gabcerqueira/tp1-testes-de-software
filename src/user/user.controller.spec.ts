@@ -21,8 +21,6 @@ describe('UserController', () => {
     controller = module.get<UserController>(UserController);
   });
 
-  /*
-
   describe('create', () => {
     it('should create a user', async () => {
       const DEFAULT_PASSWORD = '123456';
@@ -39,8 +37,6 @@ describe('UserController', () => {
     });
   });
 
-  */
-
   describe('find one', () => {
     it('should return one user', async () => {
       const id = '64f1fd4b1d5d8bc5650b85c3';
@@ -48,6 +44,32 @@ describe('UserController', () => {
       const result = await controller.findOne(id);
 
       expect(result._id).toBe(id);
+    });
+  });
+
+  describe('update', () => {
+    it('should update a user', async () => {
+      const id = '64f1fd4b1d5d8bc5650b85c3';
+      const updateUserDtoMock: User = {
+        name: 'Updated Name',
+        email: 'updated@example.com',
+        password: 'newPassword',
+        active: true,
+      };
+
+      const result = await controller.update(id, updateUserDtoMock);
+
+      expect(result.email).toEqual(updateUserDtoMock.email);
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a user', async () => {
+      const id = '64f1fd4b1d5d8bc5650b85c3';
+
+      const result = await controller.remove(id);
+
+      expect(result).toBe(true);
     });
   });
 });
