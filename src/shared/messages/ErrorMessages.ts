@@ -11,4 +11,7 @@ export const ErrorMessages = {
     ERROR_RATING_NEWS: 'Falha ao avaliar a noticia ',
     ERROR_CLICKING_NEWS: 'Falha ao ler noticia !',
   },
+  mailing: {
+    ERROR_CREATING_MAILING: 'Falha ao criar mailing',
+  },
 };

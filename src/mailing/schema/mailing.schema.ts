@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongoSchema, Types } from 'mongoose';
-import { MailingStatus } from 'src/shared/enums/mailing/MailingStatus';
+import { MailingStatus } from '../../shared/enums/mailing/MailingStatus';
 
 export type MailingDocument = Mailing & Document;
 
@@ -17,6 +17,9 @@ export class Mailing {
   email: string;
 
   @Prop()
+  phone: string;
+
+  @Prop()
   emailVerified?: string;
 
   @Prop()
@@ -26,7 +29,7 @@ export class Mailing {
   status?: MailingStatus;
 
   @Prop({ type: Boolean, default: true })
-  active: boolean;
+  active?: boolean;
 
   _id?: Types.ObjectId | string;
 }

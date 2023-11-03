@@ -1,6 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMailingDto } from './dto/create-mailing.dto';
-import { UpdateMailingDto } from './dto/update-mailing.dto';
 import { MailingRepository } from './mailing.repository';
 import { Mailing } from './schema/mailing.schema';
 

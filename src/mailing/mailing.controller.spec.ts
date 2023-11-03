@@ -1,20 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { MailingController } from './mailing.controller';
 import { MailingService } from './mailing.service';
-import { Mailing } from './schema/mailing.schema';
+import { Mailing, MailingDocument } from './schema/mailing.schema';
+import { MailingRepository } from './mailing.repository';
+import { Model } from 'mongoose';
 
 describe('MailingController', () => {
   let controller: MailingController;
-  let service: MailingService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      // imports: [mailingModel],
       controllers: [MailingController],
-      providers: [MailingService],
+      providers: [
+        MailingService,
+        {
+          provide: MailingRepository, // Provide the repository
+          useValue: {}, // You can mock this if needed
+        },
+      ],
     }).compile();
 
     controller = module.get<MailingController>(MailingController);
-    service = module.get<MailingService>(MailingService);
   });
 
   it('should create a mailing', async () => {
@@ -22,9 +29,10 @@ describe('MailingController', () => {
       name: 'Arthur Moreira',
       email: 'art@gmail.com',
       active: false,
+      phone: '31994345555',
     };
 
-    jest.spyOn(service, 'create').mockResolvedValue(mailing);
+    jest.spyOn(controller, 'create').mockResolvedValue(mailing);
 
     const result = await controller.create(mailing);
 
@@ -37,11 +45,17 @@ describe('MailingController', () => {
         name: 'Arthur Moreira',
         email: 'art@gmail.com',
         active: false,
+        phone: '31994345555',
       },
-      { name: 'Arthur Moreira', email: 'art@gmail.com', active: false },
+      {
+        name: 'Arthur Moreira',
+        email: 'art@gmail.com',
+        active: false,
+        phone: '31994345555',
+      },
     ];
 
-    jest.spyOn(service, 'findAll').mockResolvedValue(mailings as never);
+    jest.spyOn(controller, 'findAll').mockResolvedValue(mailings as never);
 
     const result = await controller.findAll();
 
@@ -54,9 +68,10 @@ describe('MailingController', () => {
       name: '',
       email: '',
       active: false,
+      phone: '31994345555',
     };
 
-    jest.spyOn(service, 'findOne').mockResolvedValue(mailing);
+    jest.spyOn(controller, 'findOne').mockResolvedValue(mailing);
 
     const result = await controller.findOne(id);
 
@@ -69,9 +84,10 @@ describe('MailingController', () => {
       name: '',
       email: '',
       active: false,
+      phone: '',
     };
 
-    jest.spyOn(service, 'update').mockResolvedValue(updatedMailing);
+    jest.spyOn(controller, 'update').mockResolvedValue(updatedMailing);
 
     const result = await controller.update(id, updatedMailing);
 
@@ -81,7 +97,7 @@ describe('MailingController', () => {
   it('should remove a mailing', async () => {
     const id = 'some-id';
 
-    jest.spyOn(service, 'remove').mockResolvedValue(true);
+    jest.spyOn(controller, 'remove').mockResolvedValue(true);
 
     const result = await controller.remove(id);
 

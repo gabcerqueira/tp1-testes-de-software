@@ -1,9 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { hash } from 'bcrypt';
-import { ErrorMessages } from 'src/shared/messages/ErrorMessages';
 import { Mailing, MailingDocument } from './schema/mailing.schema';
+import { ErrorMessages } from '../shared/messages/ErrorMessages';
 @Injectable()
 export class MailingRepository {
   constructor(
@@ -17,8 +16,9 @@ export class MailingRepository {
       });
       return await newMailing.save();
     } catch (error) {
-      console.log(error.message);
-      throw new BadRequestException(ErrorMessages.user.ERROR_CREATING_USER);
+      throw new BadRequestException(
+        ErrorMessages.mailing.ERROR_CREATING_MAILING,
+      );
     }
   }
 
@@ -31,7 +31,6 @@ export class MailingRepository {
 
       return mailings;
     } catch (error) {
-      console.log(error.message);
       throw new BadRequestException(ErrorMessages.user.USERS_NOT_FOUND);
     }
   }
