@@ -1,14 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { MailingService } from './mailing.service';
-import { CreateMailingDto } from './dto/create-mailing.dto';
-import { UpdateMailingDto } from './dto/update-mailing.dto';
+import { Mailing } from './schema/mailing.schema';
 
 @Controller('mailing')
 export class MailingController {
   constructor(private readonly mailingService: MailingService) {}
 
   @Post()
-  create(@Body() createMailingDto: CreateMailingDto) {
+  create(@Body() createMailingDto: Mailing) {
     return this.mailingService.create(createMailingDto);
   }
 
@@ -19,16 +26,16 @@ export class MailingController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.mailingService.findOne(+id);
+    return this.mailingService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMailingDto: UpdateMailingDto) {
-    return this.mailingService.update(+id, updateMailingDto);
+  update(@Param('id') id: string, @Body() updateMailingDto: Mailing) {
+    return this.mailingService.update(id, updateMailingDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.mailingService.remove(+id);
+    return this.mailingService.remove(id);
   }
 }

@@ -1,26 +1,30 @@
 import { Injectable } from '@nestjs/common';
 import { CreateMailingDto } from './dto/create-mailing.dto';
 import { UpdateMailingDto } from './dto/update-mailing.dto';
+import { MailingRepository } from './mailing.repository';
+import { Mailing } from './schema/mailing.schema';
 
 @Injectable()
 export class MailingService {
-  create(createMailingDto: CreateMailingDto) {
-    return 'This action adds a new mailing';
+  constructor(private readonly mailingRepository: MailingRepository) {}
+
+  async create(createMailingDto: Mailing) {
+    return await this.mailingRepository.createMailing(createMailingDto);
   }
 
-  findAll() {
-    return `This action returns all mailing`;
+  async findAll() {
+    return await this.mailingRepository.findAll();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mailing`;
+  async findOne(id: string) {
+    return await this.mailingRepository.findById(id);
   }
 
-  update(id: number, updateMailingDto: UpdateMailingDto) {
-    return `This action updates a #${id} mailing`;
+  async update(id: string, updateMailingDto: Mailing) {
+    return await this.mailingRepository.update(updateMailingDto);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mailing`;
+  async remove(id: string) {
+    return await this.mailingRepository.remove(id);
   }
 }

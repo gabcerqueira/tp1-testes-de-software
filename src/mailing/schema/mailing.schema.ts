@@ -31,4 +31,4 @@ export class Mailing {
   _id?: Types.ObjectId | string;
 }
 
-export const UserSchema = SchemaFactory.createForClass(Mailing);
+export const MailingSchema = SchemaFactory.createForClass(Mailing);
