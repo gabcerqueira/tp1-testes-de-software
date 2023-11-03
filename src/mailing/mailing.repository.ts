@@ -40,7 +40,11 @@ export class MailingRepository {
   }
 
   async findById(id: string): Promise<Mailing | null> {
-    return this.mailingModel.findById(id).exec();
+    try {
+      return this.mailingModel.findById(id).exec();
+    } catch (error) {
+      throw new BadRequestException(ErrorMessages.mailing.MAILING_NOT_FOUND);
+    }
   }
 
   async update(userDto: Mailing): Promise<Mailing | null> {
