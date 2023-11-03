@@ -5,7 +5,7 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { IauthController } from './interfaces/Iauth.controller';
 import { Request } from 'express';
 import { LoginDto } from './dto/login.dto';
-import { User } from 'src/user/schema/user.schema';
+import { User } from '../user/schema/user.schema';
 import { DecodedToken } from './dto/decodedToken';
 
 @ApiTags('Módulo de login')
