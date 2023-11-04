@@ -65,13 +65,16 @@ describe('AuthController', () => {
         password: 'password123',
         active: true,
       };
-
+      const loginInfo: LoginDto = {
+        email:user.email,
+        password:user.password
+      };
       jest.spyOn(authService, 'assignToken').mockResolvedValue({
         token: 'accessToken',
         renewToken: 'renewToken',
       });
 
-      const result = await authService.login(user);
+      const result = await authController.login(user,loginInfo);
 
       expect(result).toEqual({
         user,
@@ -104,7 +107,7 @@ describe('AuthController', () => {
         }),
       );
 
-      const result = await authService.refresh(decodedToken);
+      const result = await authController.refresh(decodedToken);
 
       expect(result).toEqual({
         token: 'newAccessToken',
