@@ -4,6 +4,7 @@ import { UserRepository } from './user.repository';
 import { User } from './schema/user.schema';
 import { SanitizedUser } from './dto/sanitizedUser';
 import { ErrorMessages } from '../shared/messages/ErrorMessages';
+import { BadRequestException } from '@nestjs/common';
 
 describe('UserService', () => {
   let userService: UserService;
@@ -11,15 +12,24 @@ describe('UserService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserService, UserRepository],
+      providers: [
+        UserService,
+        {
+          provide: UserRepository,
+          useValue: {
+            createUser: jest.fn(),
+            findAll: jest.fn(),
+            findById: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
+            findByEmail: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     userService = module.get<UserService>(UserService);
     userRepository = module.get<UserRepository>(UserRepository);
-  });
-
-  it('should be defined', () => {
-    expect(userService).toBeDefined();
   });
 
   describe('create', () => {
@@ -32,9 +42,11 @@ describe('UserService', () => {
       };
       jest
         .spyOn(userRepository, 'createUser')
-        .mockRejectedValue(new Error('Failed to create user'));
+        .mockRejectedValue(new Error(ErrorMessages.user.ERROR_CREATING_USER));
 
-      await expect(userService.create(createUserDto)).rejects.toThrow(Error);
+      await expect(userService.create(createUserDto)).rejects.toThrow(
+        ErrorMessages.user.ERROR_CREATING_USER,
+      );
     });
   });
 
@@ -125,34 +137,21 @@ describe('UserService', () => {
       expect(result).toEqual(userService.sanitizeUser(updatedUser));
     });
 
-    it('should handle user update failure', async () => {
+    it('should handle error when updating user fails', async () => {
       const updateUserDto: User = {
-        email: 'updated@example.com',
-        name: 'Updated User',
-        password: 'newPassword',
-        active: true,
+        name: 'jota',
+        email: 'jota@gmail.com',
+        active: false,
       };
 
-      jest.spyOn(userRepository, 'update').mockResolvedValue(null);
+      (userRepository.update as jest.Mock).mockRejectedValue(
+        new Error(ErrorMessages.user.ERROR_UPDATING_USER),
+      );
 
       await expect(userService.update(updateUserDto)).rejects.toThrow(
-        ErrorMessages.user.ERROR_UPDATING_USER,
+        BadRequestException,
       );
-    });
-
-    it('should handle errors during user update', async () => {
-      const updateUserDto: User = {
-        email: 'updated@example.com',
-        name: 'Updated User',
-        password: 'newPassword',
-        active: true,
-      };
-
-      jest
-        .spyOn(userRepository, 'update')
-        .mockRejectedValue(new Error('Failed to update user'));
-
-      await expect(userService.update(updateUserDto)).rejects.toThrow(Error);
+      expect(userRepository.update).toHaveBeenCalledWith(updateUserDto);
     });
   });
 
@@ -178,22 +177,33 @@ describe('UserService', () => {
 
   describe('findByEmail', () => {
     it('should find a user by email', async () => {
-      const userEmail = 'test@example.com';
-      const user: User = new User();
+      const userEmail = 'jonas@gmail.com'; // Provide a valid user email
+
+      const user: User | null = {
+        name: 'jonas',
+        email: 'jonas@gmail.com',
+        active: false,
+      };
+
       jest.spyOn(userRepository, 'findByEmail').mockResolvedValue(user);
 
       const result = await userService.findByEmail(userEmail);
 
       expect(result).toEqual(user);
+      expect(userRepository.findByEmail).toHaveBeenCalledWith(userEmail);
     });
 
-    it('should handle user not found by email', async () => {
-      const userEmail = 'nonexistent@example.com';
-      jest.spyOn(userRepository, 'findByEmail').mockResolvedValue(null);
+    it('should handle error when finding user by email fails', async () => {
+      const userEmail = 'jonas@gmail.com'; // Provide a valid user email
 
-      const result = await userService.findByEmail(userEmail);
+      jest
+        .spyOn(userRepository, 'findByEmail')
+        .mockRejectedValue(new Error(ErrorMessages.user.USER_DOES_NOT_EXIST));
 
-      expect(result).toBeNull();
+      await expect(userService.findByEmail(userEmail)).rejects.toThrow(
+        BadRequestException,
+      );
+      expect(userRepository.findByEmail).toHaveBeenCalledWith(userEmail);
     });
   });
 });

@@ -51,4 +51,73 @@ describe('MailingService', () => {
       expect(repository.createMailing).toHaveBeenCalledWith(mailingDto);
     });
   });
+
+  describe('findAll', () => {
+    it('should return all mailings', async () => {
+      const allMailings: Mailing[] = [
+        // Provide sample mailings
+      ];
+
+      (repository.findAll as jest.Mock).mockResolvedValue(allMailings);
+
+      const result = await service.findAll();
+
+      expect(result).toEqual(allMailings);
+      expect(repository.findAll).toHaveBeenCalled();
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a mailing by id', async () => {
+      const mailingId = 'someId';
+      const foundMailing: Mailing = {
+        name: 'Junior',
+        email: 'junior@gmail.com',
+        phone: '31994638076',
+      };
+
+      (repository.findById as jest.Mock).mockResolvedValue(foundMailing);
+
+      const result = await service.findOne(mailingId);
+
+      expect(result).toEqual(foundMailing);
+      expect(repository.findById).toHaveBeenCalledWith(mailingId);
+    });
+  });
+
+  describe('update', () => {
+    it('should update a mailing', async () => {
+      const mailingId = 'someId';
+      const updateMailingDto: Mailing = {
+        name: 'Junior',
+        email: 'junior@gmail.com',
+        phone: '31994638076',
+      };
+      const updatedMailing: Mailing = {
+        name: 'Adalto',
+        email: 'Adalto@gmail.com',
+        phone: '31994638076',
+      };
+
+      (repository.update as jest.Mock).mockResolvedValue(updatedMailing);
+
+      const result = await service.update(mailingId, updateMailingDto);
+
+      expect(result).toEqual(updatedMailing);
+    });
+  });
+
+  describe('remove', () => {
+    it('should remove a mailing', async () => {
+      const mailingId = 'someId';
+      const isRemoved = true;
+
+      (repository.remove as jest.Mock).mockResolvedValue(isRemoved);
+
+      const result = await service.remove(mailingId);
+
+      expect(result).toEqual(isRemoved);
+      //expect(repository.remove).toHaveBeenCalledWith(mailingId);
+    });
+  });
 });

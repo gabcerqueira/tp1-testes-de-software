@@ -14,5 +14,9 @@ export const ErrorMessages = {
   mailing: {
     ERROR_CREATING_MAILING: 'Falha ao criar mailing',
     MAILING_NOT_FOUND: 'Falha ao recuperar mailing !',
+    ERROR_FINDING_MAILINGS: 'Falha ao recuperar as mailings',
+    ERROR_FINDING_MAILING: 'Falha ao recuperar mailing',
+    ERROR_UPDATING_MAILING: 'Falha ao modificar mailing',
+    ERROR_REMOVING_MAILING: 'Falha ao remover mailing',
   },
 };

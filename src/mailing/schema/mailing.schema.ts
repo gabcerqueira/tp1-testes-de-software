@@ -4,7 +4,7 @@ import { MailingStatus } from '../../shared/enums/mailing/MailingStatus';
 
 export type MailingDocument = Mailing & Document;
 
-@Schema({ timestamps: true, collection: 'users' })
+@Schema({ timestamps: true, collection: 'mailing' })
 export class Mailing {
   @Prop({ required: true })
   name: string;

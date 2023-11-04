@@ -7,6 +7,4 @@ export interface IauthService {
   refresh(decodedToken: DecodedToken): Promise<UserInfoToken>;
 
   login(user: User): Promise<{ user: User; token: UserInfoToken }>;
-
-  validateUserByToken(decodedToken: DecodedToken): Promise<boolean>;
 }

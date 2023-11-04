@@ -34,13 +34,17 @@ export class UserRepository implements IuserRepository {
 
       return users;
     } catch (error) {
-      console.log(error.message);
+      //console.log(error.message);
       throw new BadRequestException(ErrorMessages.user.USERS_NOT_FOUND);
     }
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return this.userModel.findOne({ email }).exec();
+    try {
+      return this.userModel.findOne({ email }).exec();
+    } catch (error) {
+      throw new BadRequestException(ErrorMessages.user.USERS_NOT_FOUND);
+    }
   }
 
   async findById(id: string): Promise<User | null> {
@@ -48,9 +52,13 @@ export class UserRepository implements IuserRepository {
   }
 
   async update(userDto: User): Promise<User | null> {
-    return this.userModel
-      .findByIdAndUpdate(userDto._id, userDto, { new: true })
-      .exec();
+    try {
+      return this.userModel
+        .findByIdAndUpdate(userDto._id, userDto, { new: true })
+        .exec();
+    } catch (error) {
+      throw new BadRequestException(ErrorMessages.user.ERROR_UPDATING_USER);
+    }
   }
 
   async remove(id: string): Promise<boolean> {

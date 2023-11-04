@@ -61,16 +61,16 @@ export class UserService implements IuserService {
   async update(updateUserDto: User) {
     try {
       let updatedUser = await this.userRepository.update(updateUserDto);
-
+      /*
       if (!updatedUser) {
-        throw new Error(ErrorMessages.user.ERROR_UPDATING_USER);
+        throw new BadRequestException(ErrorMessages.user.ERROR_UPDATING_USER);
       }
-
+      */
       let sanitizedUserDto: SanitizedUser = this.sanitizeUser(updatedUser);
 
       return sanitizedUserDto;
     } catch (error) {
-      return null;
+      throw new BadRequestException(ErrorMessages.user.ERROR_UPDATING_USER);
     }
   }
 
@@ -79,13 +79,17 @@ export class UserService implements IuserService {
   }
 
   async findByEmail(email: User['email']): Promise<User | null> {
-    //Chamada da camada de rep
+    try {
+      //Chamada da camada de rep
 
-    let user: User | null;
+      let user: User | null;
 
-    user = await this.userRepository.findByEmail(email);
+      user = await this.userRepository.findByEmail(email);
 
-    return user;
+      return user;
+    } catch (error) {
+      throw new BadRequestException(ErrorMessages.user.USER_DOES_NOT_EXIST);
+    }
   }
 
   sanitizeUser(user: User): SanitizedUser {

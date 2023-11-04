@@ -15,10 +15,6 @@ export class AuthService implements IauthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  validateUserByToken(decodedToken: DecodedToken): Promise<boolean> {
-    throw new Error('Method not implemented.');
-  }
-
   async refresh(decodedToken: DecodedToken): Promise<UserInfoToken> {
     try {
       const user = await this.userService.findByEmail(decodedToken.email);
