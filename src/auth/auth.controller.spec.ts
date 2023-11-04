@@ -41,7 +41,7 @@ describe('AuthController', () => {
       };
 
       const user: User = {
-        _id: 123456,
+        _id: '123456',
         name: 'Test',
         active: true,
         email: 'test@example.com',
@@ -64,7 +64,7 @@ describe('AuthController', () => {
   describe('refresh', () => {
     it('should return a new token on successful refresh', async () => {
       const user: User = {
-        _id: 123456,
+        _id: '123456',
         name: 'Test',
         active: true,
         email: 'test@example.com',
