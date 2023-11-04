@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from './dto/login.dto';
+import { User } from '../user/schema/user.schema';
 
 describe('AuthController', () => {
-  let controller: AuthController;
-  let service: AuthService;
+  let authController: AuthController;
+  let authService: AuthService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -24,6 +25,7 @@ describe('AuthController', () => {
       ],
     }).compile();
 
-    controller = module.get<AuthController>(AuthController);
+    authController = module.get<AuthController>(AuthController);
+    authService = module.get<AuthService>(AuthService);
   });
 });
