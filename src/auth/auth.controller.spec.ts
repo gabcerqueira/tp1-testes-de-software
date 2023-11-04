@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { UserService } from '../user/user.service';
 import { JwtService } from '@nestjs/jwt';
 import { DecodedToken } from './dto/decodedToken';
-
+import { ErrorMessages } from '../shared/messages/ErrorMessages';
 import { UserRepository } from '../user/user.repository';
 import { LoginDto } from './dto/login.dto';
 import { User } from '../user/schema/user.schema';
