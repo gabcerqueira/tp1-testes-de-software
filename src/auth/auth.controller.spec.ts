@@ -37,13 +37,14 @@ describe('AuthController', () => {
     it('should return a token on successful login', async () => {
       const loginDto: LoginDto = {
         email: 'test@example.com',
-        active: true,
-        password: 'password123',
+        password: 'password123'
       };
 
       const user: User = {
         name: 'Test',
+        active: TRUE,
         email: 'test@example.com',
+        password: 'password123'
       };
 
       jest.spyOn(authService, 'login').mockImplementation(async () => ({
