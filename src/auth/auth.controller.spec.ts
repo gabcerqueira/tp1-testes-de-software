@@ -60,7 +60,8 @@ describe('AuthController', () => {
       };
 
       jest.spyOn(authService, 'login').mockImplementation(async () => ({
-        access_token: mockToken,
+        user: mockToken.user,
+        token: mockToken.token
       }));
 
       const result = await authController.login({}, loginDto);
@@ -92,7 +93,8 @@ describe('AuthController', () => {
       };
 
       jest.spyOn(authService, 'refresh').mockImplementation(async () => ({
-        access_token: mockToken,
+        user: mockToken.user,
+        token: mockToken.token
       }));
 
       const result = await authController.refresh({ user });
