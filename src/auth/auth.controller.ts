@@ -17,6 +17,7 @@ export class AuthController implements IauthController {
   @Post('login')
   @ApiOperation({ summary: 'Login no sistema por email e senha' })
   async login(@Req() req: any, @Body() loginDto: LoginDto) {
+    console.log('USER : ', req.user);
     return await this.authService.login(req.user);
   }
 
@@ -24,6 +25,7 @@ export class AuthController implements IauthController {
   @Post('refresh')
   @ApiOperation({ summary: 'Renovar o token' })
   async refresh(@Req() req: any) {
+    console.log('USER : ', req.user);
     return await this.authService.refresh(req.user);
   }
 }
