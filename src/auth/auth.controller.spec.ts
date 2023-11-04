@@ -87,15 +87,14 @@ describe('AuthController', () => {
         password: 'password123',
         active: true,
       };
-      /*
-      jest.spyOn(userService, 'findByEmail').mockResolvedValue(user);
-      jest.spyOn(authService, 'assignToken').mockResolvedValue(
-        Promise.resolve({
-          token: 'newAccessToken',
-          renewToken: 'newRenewToken',
-        }),
-      );
-      */
+
+      //jest.spyOn(userService, 'findByEmail').mockResolvedValue(user);
+      // jest.spyOn(authService, 'assignToken').mockResolvedValue(
+      //   Promise.resolve({
+      //     token: 'newAccessToken',
+      //     renewToken: 'newRenewToken',
+      //   }),
+      // );
 
       const result = await authController.refresh(decodedToken);
 
@@ -121,7 +120,11 @@ describe('AuthController', () => {
         exp: (Date.now() + 3600) / 1000,
       };
 
-      expect(true).toBe(true);
+      // jest
+      //   .spyOn(userService, 'findByEmail')
+      //   .mockRejectedValue(new Error('User retrieval error'));
+
+      expect(true).toBe(true); // This will always pass
     });
   });
 });
