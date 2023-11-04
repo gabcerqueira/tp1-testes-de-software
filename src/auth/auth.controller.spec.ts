@@ -48,7 +48,16 @@ describe('AuthController', () => {
         password: 'password123'
       };
 
-      const mockToken = { user: User,token: 'mocked-access-token'}
+      const mockToken = {
+        user: {
+          _id: '123456',
+          name: 'Test',
+          active: true,
+          email: 'test@example.com',
+          password: 'password123',
+        },
+        token: 'mocked-access-token',
+      };
 
       jest.spyOn(authService, 'login').mockImplementation(async () => ({
         access_token: mockToken,
@@ -71,7 +80,16 @@ describe('AuthController', () => {
         password: 'password123'
       };
 
-      const mockToken = { user: User,token: 'mocked-access-token'}
+      const mockToken = {
+        user: {
+          _id: '123456',
+          name: 'Test',
+          active: true,
+          email: 'test@example.com',
+          password: 'password123',
+        },
+        token: 'mocked-access-token',
+      };
 
       jest.spyOn(authService, 'refresh').mockImplementation(async () => ({
         access_token: mockToken,
