@@ -1,6 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { UserService } from '../user/user.service';
+import { JwtService } from '@nestjs/jwt';
+import { DecodedToken } from './dto/decodedToken';
+
+import { UserRepository } from '../user/user.repository';
 import { LoginDto } from './dto/login.dto';
 import { User } from '../user/schema/user.schema';
 
@@ -8,10 +13,14 @@ describe('AuthController', () => {
   let authController: AuthController;
   let authService: AuthService;
 
+  let userService: UserService;
+  let jwtService: JwtService;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
+        AuthService,
         {
           provide: AuthService,
           useValue: {
@@ -22,6 +31,20 @@ describe('AuthController', () => {
             assignToken: jest.fn(),
           },
         },
+        UserService,
+        {
+          provide: UserRepository,
+          useValue: {
+            createUser: jest.fn(),
+            findAll: jest.fn(),
+            findById: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
+            findByEmail: jest.fn(),
+          },
+        },
+
+        JwtService,
       ],
     }).compile();
 
@@ -34,72 +57,91 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    it('should return a token on successful login', async () => {
-      const loginDto: LoginDto = {
-        email: 'test@example.com',
-        password: 'password123'
-      };
-
+    it('should return user and UserInfoToken after successful login', async () => {
       const user: User = {
-        _id: '123456',
-        name: 'Test',
-        active: true,
+        _id: 'userId',
         email: 'test@example.com',
-        password: 'password123'
+        name: 'Test User',
+        password: 'password123',
+        active: true,
       };
 
-      const mockToken = {
-        user: {
-          _id: '123456',
-          name: 'Test',
-          active: true,
-          email: 'test@example.com',
-          password: 'password123',
-        },
-        token: 'mocked-access-token',
-      };
+      jest.spyOn(authService, 'assignToken').mockResolvedValue({
+        token: 'accessToken',
+        renewToken: 'renewToken',
+      });
 
-      jest.spyOn(authService, 'login').mockImplementation(async () => ({
-        user: mockToken.user,
-        token: mockToken.token
-      }));
+      const result = await authService.login(user);
 
-      const result = await authController.login({}, loginDto);
-
-      expect(result).toEqual({ access_token: mockToken });
+      expect(result).toEqual({
+        user,
+        token: { token: 'accessToken', renewToken: 'renewToken' },
+      });
     });
-
   });
 
   describe('refresh', () => {
-    it('should return a new token on successful refresh', async () => {
-      const user: User = {
-        _id: '123456',
-        name: 'Test',
-        active: true,
+    it('should refresh the token and return UserInfoToken', async () => {
+      const decodedToken: DecodedToken = {
+        sub: 'userId',
         email: 'test@example.com',
-        password: 'password123'
+        iat: Date.now() / 1000,
+        exp: (Date.now() + 3600) / 1000,
+      };
+      const user: User = {
+        _id: 'userId',
+        email: 'test@example.com',
+        name: 'Test User',
+        password: 'password123',
+        active: true,
       };
 
-      const mockToken = {
-        user: {
-          _id: '123456',
-          name: 'Test',
-          active: true,
-          email: 'test@example.com',
-          password: 'password123',
-        },
-        token: 'mocked-access-token',
+      jest.spyOn(userService, 'findByEmail').mockResolvedValue(user);
+      jest.spyOn(authService, 'assignToken').mockResolvedValue(
+        Promise.resolve({
+          token: 'newAccessToken',
+          renewToken: 'newRenewToken',
+        }),
+      );
+
+      const result = await authService.refresh(decodedToken);
+
+      expect(result).toEqual({
+        token: 'newAccessToken',
+        renewToken: 'newRenewToken',
+      });
+    });
+
+    it('should handle user not found and throw an error', async () => {
+      const decodedToken: DecodedToken = {
+        sub: 'userId',
+        email: 'test@example.com',
+        iat: Date.now() / 1000,
+        exp: (Date.now() + 3600) / 1000,
       };
 
-      jest.spyOn(authService, 'refresh').mockImplementation(async () => ({
-        user: mockToken.user,
-        token: mockToken.token
-      }));
+      jest.spyOn(userService, 'findByEmail').mockResolvedValue(null);
 
-      const result = await authController.refresh({ user });
+      await expect(authService.refresh(decodedToken)).rejects.toThrow(
+        ErrorMessages.user.USER_DOES_NOT_EXIST,
+      );
+    });
 
-      expect(result).toEqual({ access_token: mockToken });
+    it('should handle errors during refresh and throw an error', async () => {
+      const decodedToken: DecodedToken = {
+        sub: 'userId',
+        email: 'test@example.com',
+        iat: Date.now() / 1000,
+        exp: (Date.now() + 3600) / 1000,
+      };
+
+      jest
+        .spyOn(userService, 'findByEmail')
+        .mockRejectedValue(new Error('User retrieval error'));
+
+      await expect(authService.refresh(decodedToken)).rejects.toThrow(
+        'User retrieval error',
+      );
     });
   });
 });

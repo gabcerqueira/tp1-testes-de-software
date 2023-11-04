@@ -42,7 +42,7 @@ export class AuthService implements IauthService {
 
       user = await this.userService.findByEmail(email);
 
-      console.log('USER : ', user);
+      //console.log('USER : ', user);
 
       //if (!user.active) return null;
 
@@ -59,7 +59,7 @@ export class AuthService implements IauthService {
       sanitizedUser.email = user.email;
       sanitizedUser.name = user.name;
 
-      console.log('user : ', sanitizedUser);
+      //console.log('user : ', sanitizedUser);
 
       return sanitizedUser;
     } catch (error) {
@@ -73,7 +73,7 @@ export class AuthService implements IauthService {
       email: user.email,
     };
     const userInfoToken = new UserInfoToken();
-    console.log('PAYLOAD : ', payload);
+    //console.log('PAYLOAD : ', payload);
     //Assinar o token
     Object.assign(userInfoToken, {
       token: this.jwtService.sign(payload),
