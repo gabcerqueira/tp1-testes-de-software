@@ -29,6 +29,10 @@ describe('AuthController', () => {
     authService = module.get<AuthService>(AuthService);
   });
 
+  it('should be defined', () => {
+    expect(authController).toBeDefined();
+  });
+
   describe('login', () => {
     it('should return a token on successful login', async () => {
       const loginDto: LoginDto = {
@@ -37,7 +41,7 @@ describe('AuthController', () => {
       };
 
       const user: User = {
-        id: '1',
+        name: 'Test',
         email: 'test@example.com',
       };
 
@@ -55,7 +59,7 @@ describe('AuthController', () => {
   describe('refresh', () => {
     it('should return a new token on successful refresh', async () => {
       const user: User = {
-        id: '1',
+        name: 'Test',
         email: 'test@example.com',
       };
 
