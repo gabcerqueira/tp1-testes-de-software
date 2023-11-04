@@ -37,6 +37,7 @@ describe('AuthController', () => {
     it('should return a token on successful login', async () => {
       const loginDto: LoginDto = {
         email: 'test@example.com',
+        active: true,
         password: 'password123',
       };
 
@@ -60,6 +61,7 @@ describe('AuthController', () => {
     it('should return a new token on successful refresh', async () => {
       const user: User = {
         name: 'Test',
+        active: true,
         email: 'test@example.com',
       };
 
