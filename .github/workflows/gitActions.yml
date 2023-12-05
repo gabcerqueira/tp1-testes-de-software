@@ -49,6 +49,4 @@ jobs:
 
     - name: Collect coverage
       uses: codecov/codecov-action@v3
-      with:
-          files: ../coverage/clover.xml # optional
 
