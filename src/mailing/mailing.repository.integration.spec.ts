@@ -24,7 +24,7 @@ describe('MailingRepository', () => {
 
     await connect(server.getUri(), { dbName: 'test' });
     collection = connection.collection('mailing');
-  });
+  }); 
 
   afterAll(async () => {
     await connection.destroy();
