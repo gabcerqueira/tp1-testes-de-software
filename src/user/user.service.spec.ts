@@ -5,11 +5,11 @@ import { User } from './schema/user.schema';
 import { SanitizedUser } from './dto/sanitizedUser';
 import { ErrorMessages } from '../shared/messages/ErrorMessages';
 import { BadRequestException } from '@nestjs/common';
+import { model } from 'mongoose';
 
 describe('UserService', () => {
   let userService: UserService;
   let userRepository: UserRepository;
-
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -45,6 +45,22 @@ describe('UserService', () => {
         .mockRejectedValue(new Error(ErrorMessages.user.ERROR_CREATING_USER));
 
       await expect(userService.create(createUserDto)).rejects.toThrow(
+        ErrorMessages.user.ERROR_CREATING_USER,
+      );
+    });
+  });
+
+  describe('createIntegration', () => {
+    it('should handle errors during user creation', async () => {
+      const createUserDto: User = {
+        email: 'test@example.com',
+        name: 'Test User',
+        password: 'password123',
+        active: true,
+      };
+
+      await userService.create(createUserDto);
+       expect(userService.create(createUserDto)).rejects.toThrow(
         ErrorMessages.user.ERROR_CREATING_USER,
       );
     });

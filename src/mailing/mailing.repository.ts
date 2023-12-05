@@ -55,9 +55,7 @@ export class MailingRepository {
 
   async remove(id: string): Promise<boolean> {
     try {
-      let user: Mailing | null = await this.mailingModel
-        .findByIdAndDelete(id)
-        .exec();
+      let user: Mailing | null | any = await this.mailingModel.findByIdAndDelete(id).exec();
 
       if (!user) {
         throw new Error(ErrorMessages.user.ERROR_DELETING_USER);

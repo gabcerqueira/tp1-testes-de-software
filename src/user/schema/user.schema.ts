@@ -6,20 +6,20 @@ export type UserDocument = User & Document;
 @Schema({ timestamps: true, collection: 'users' })
 export class User {
   @Prop({ required: true })
-  name: string;
+  name?: string;
 
   @Prop({
     required: true,
     index: true,
     unique: true,
   })
-  email: string;
+  email?: string;
 
   @Prop()
   password?: string;
 
   @Prop({ type: Boolean, default: true })
-  active: boolean;
+  active?: boolean;
 
   _id?: Types.ObjectId | string;
 }
