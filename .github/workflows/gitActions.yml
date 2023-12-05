@@ -43,5 +43,8 @@ jobs:
 
     - name: Run tests
       run: yarn run test
+
+    - name: Run tests Coverage
+      run: yarn run test:cov
       
 
