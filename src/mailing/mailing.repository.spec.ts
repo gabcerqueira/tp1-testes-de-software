@@ -96,6 +96,4 @@ describe('MailingRepository', () => {
       ).rejects.toThrow(ErrorMessages.mailing.MAILING_NOT_FOUND);
     });
   });
-
-  // Write your tests here...
 });

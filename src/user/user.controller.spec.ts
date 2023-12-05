@@ -5,7 +5,7 @@ import { User, UserSchema } from './schema/user.schema';
 import { faker } from '@faker-js/faker';
 import { UserRepository } from './user.repository';
 import { SanitizedUser } from './dto/sanitizedUser';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
 import { BadRequestException } from '@nestjs/common';
 import { ErrorMessages } from '../shared/messages/ErrorMessages';
 
@@ -160,4 +160,6 @@ describe('UserController', () => {
       );
     });
   });
+
+  it('get a user - integration');
 });
